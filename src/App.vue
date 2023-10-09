@@ -33,7 +33,17 @@
                 <WO v-for="(wo,i) in getOrderByLine(getVanilla,line)" :key="i" :ElementsBefore=" i > 0 ? getOrderByLine(getVanilla,line)[i-1].elements : wo.elements  " :wo="wo"/>
               </div>
             </div>
+            <div class="inventory" v-if="Object.keys(getVanillaInventory).length > 0">
+              <div class="title">
+                <h3>Inventory</h3>
+                <button class="parts" @click="inventory.tvan = !inventory.tvan">
+                  -
+                </button>
+              </div>
+              <LineInventory :elements = getVanillaInventory  v-if="inventory.tvan"/>
+            </div>
           </div>
+         
           
         </div>
 
@@ -47,6 +57,15 @@
               <div class="worders" :class="{'alone-screen': justLines, 'share-screen': !justLines}">
                 <WO v-for="(wo,i) in getOrderByLine(getTtla,line)" :key="i" :ElementsBefore=" i > 0 ? getOrderByLine(getTtla,line)[i-1].elements : wo.elements  " :wo="wo"/>
               </div>
+            </div>
+            <div class="inventory" v-if="Object.keys(getTtlaInventory).length > 0">
+              <div class="title">
+                <h3>Inventory</h3>
+                <button class="parts" @click="inventory.ttla = !inventory.ttla">
+                  -
+                </button>
+              </div>
+              <LineInventory :elements = getTtlaInventory  v-if="inventory.ttla" />
             </div>
           </div>
         </div>
@@ -72,7 +91,7 @@
   </div>
 
     <div>
-      
+     
      
     </div>
 </template>
@@ -82,6 +101,7 @@ import WO from './components/WO.vue'
 import ToOrder from './components/ToOrder.vue'
 import UpExcels from './components/UpExcels.vue'
 import WODetails from './components/WODetails.vue'
+import LineInventory from './components/LineInventory.vue'
 import { mapActions } from 'vuex';
 
 export default {
@@ -89,14 +109,18 @@ export default {
   data(){
     return{
       parts: false,
-      
+      inventory:{
+        ttla: false,
+        tvan: false
+      }
     }
   },
   components: {
       WO,
       UpExcels,
       ToOrder,
-      WODetails
+      WODetails,
+      LineInventory
   },
   computed: {
 
@@ -126,6 +150,17 @@ export default {
     WOSelected() {
       return this.$store.getters.getWOSelected;
     },
+
+    getInventory(){
+      return this.$store.getters.getInventory;
+    },
+    getVanillaInventory(){
+      return this.$store.getters.getVanillaInventory;
+    },
+    getTtlaInventory(){
+      return this.$store.getters.getTtlaInventory;
+    }
+    
     
   },
   methods: {
@@ -174,7 +209,7 @@ export default {
     grid-template-columns: 100%;
   }
   &.share-screen{
-    grid-template-columns: 75% 25%;
+    grid-template-columns: 65% 35%;
   }
 }
 #main{
@@ -185,6 +220,7 @@ export default {
   display: grid;
   grid-template-columns: 50% 50%;
   #title{
+    
     h1{
       font-family: 'Agdasima', sans-serif;
       font-weight: 700;
@@ -262,6 +298,33 @@ export default {
       }
       &.share-screen{
         grid-template-columns: repeat(8,auto);
+      }
+    }
+  }
+  .inventory{
+    width: 100%;
+    .title{
+      display: grid;
+      grid-template-columns: auto 20px;
+      background-color: black;
+      color: white;
+      button{
+        background: none;
+        color: inherit;
+        border: none;
+        padding: 0;
+        font: inherit;
+        cursor: pointer;
+        outline: inherit;
+        img{
+          display: block;
+          width: auto;
+          height: 2.5vh;
+        }
+        span{
+          display: block;
+          
+        }
       }
     }
   }

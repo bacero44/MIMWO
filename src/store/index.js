@@ -1,3 +1,4 @@
+
 import { createStore } from 'vuex'
 
 export default createStore({
@@ -5,6 +6,7 @@ export default createStore({
     name:'Bacero44',
     wos:[],
     selected:0,
+    inventory:{},
   },
   methods: {
     saludar() {
@@ -40,9 +42,7 @@ export default createStore({
     getWOSelected(state){
       return state.selected;
     },
-
-   
-
+    
     getElementsTotal:(state) => (param) => {
       const sumaByGpn = {};
       state.wos.forEach(wo => {
@@ -67,7 +67,37 @@ export default createStore({
       });
      
       return sumaByGpn;
-    }
+    },
+
+    getInventory(state){
+      return state.inventory;
+    },
+    getVanillaInventory(state) {
+      const filteredData = {};
+      for (const key in state.inventory) {
+        if (key in state.inventory && "WIPTVAN" in state.inventory[key]) {
+          filteredData[key] = {
+            description :state.inventory[key].description,
+            quantity : state.inventory[key].WIPTVAN
+          };
+          
+        }
+      }
+      return filteredData;
+    },
+    //TODO: super redun
+    getTtlaInventory(state) {
+      const filteredData = {};
+      for (const key in state.inventory) {
+        if (key in state.inventory && "WIPTTLA" in state.inventory[key]) {
+          filteredData[key] = {
+            description :state.inventory[key].description,
+            quantity : state.inventory[key].WIPTTLA
+          };
+        }
+      }
+      return filteredData;
+    },
   
   },
   mutations: {
@@ -106,6 +136,9 @@ export default createStore({
       }else{
         state.selected = id;
       }
+    },
+    addInventory(state,payload){
+      state.inventory = payload;
     }
   },
   actions: {
@@ -121,6 +154,9 @@ export default createStore({
     selectWO({commit},id){
       commit('selectWO',id)
     },
+    addToInventory({commit}, payload){
+      commit('addInventory',payload)
+    }
 
     
 

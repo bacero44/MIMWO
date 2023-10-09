@@ -49,12 +49,15 @@ export default{
     }
   },
   methods:{
-    ...mapActions(['addToSequence','addToWO']),
+    ...mapActions(['addToSequence','addToWO','addToInventory']),
     addElementToSequence(payload){
       this.addToSequence(payload);
     },
     addElements(payload){
       this.addToWO(payload);
+    },
+    addInventory(payload){
+      this.addToInventory(payload);
     },
 
         
@@ -76,12 +79,26 @@ export default{
           const data = new Uint8Array(e.target.result);
           const workbook = read(data, { type: 'array' });
           const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-          const trimmedStr = worksheet['A'+1]?.v.replace(/\s/g, '');
-          if(trimmedStr == "WORKORDERTRAVELERFORM"){
-            self.WOExcelHandler(worksheet);
-          }if (trimmedStr == "WORKORDERRELEASESEQUENCEREPORT") {
-            self.SequenceExcelHandler(worksheet);
-          } 
+          let trimmedStr = worksheet['A'+1]?.v.replace(/\s/g, '');
+          let trimmedStr2 = worksheet['B'+1]?.v.replace(/\s/g, '');
+          trimmedStr = trimmedStr !== null && trimmedStr !== undefined && trimmedStr !== '' ? trimmedStr : trimmedStr2;
+          
+          switch (trimmedStr) {
+            case 'WORKORDERTRAVELERFORM' :
+              self.WOExcelHandler(worksheet);
+            break;
+            case 'WORKORDERRELEASESEQUENCEREPORT':
+              self.SequenceExcelHandler(worksheet);
+            break;
+            case 'MIMINVENTORYBYBIN':
+              self.InventoryExcelHandler(worksheet);
+            break;
+            
+            default:
+              break;
+          }
+          
+
         };
         reader.readAsArrayBuffer(files[i]);
       }
@@ -196,6 +213,41 @@ export default{
           }
         }while(blank<=4)
       });
+    },
+    InventoryExcelHandler(worksheet){
+      const self = this;
+      const items={};
+      //TODO: duplicate, create a function
+      const range = worksheet['!ref'];
+      const rangeCoordinates = range.split(':');
+      const lastCell = rangeCoordinates[1];
+      const lastCellCoordinates = lastCell.match(/[A-Z]+|[0-9]+/g);
+      const lastCellRow = parseInt(lastCellCoordinates[1]);
+      for(let t = 1; t <= lastCellRow; t++){
+        let str =worksheet['B'+t]?.v;
+        if(str !== null && str !== undefined && str !== ''){
+          str = str.replace(/-R/g, '');
+          let place = worksheet['J'+t]?.v;
+          if(place == "WIPTTLA" || place == "WIPTVAN" || place == "ASRSB"){
+            if (str in items){
+              if (place in items[str]){
+                items[str][place] = items[str][place] + worksheet['M'+t]?.v
+              } else {
+                items[str][place] = worksheet['M'+t]?.v;
+                
+              }
+            } else{
+              items[str]= {
+                description: worksheet['T'+t]?.v,
+                [place]: worksheet['M'+t]?.v,
+
+              }
+            }
+          }
+          
+        }
+      }
+      self.addInventory(items);
     }
   }
 }
