@@ -1,12 +1,13 @@
 <template>
-  <div class="wos-index" :class="{'inverse': wo.id == WOSelected, 'normal': wo.id != WOSelected }">
-    <article @click="selectWO(wo.id)"> 
-    <div class="wo-head" :class="{'inverse': wo.id == WOSelected, 'normal': wo.id != WOSelected, 'alert':!SameLastOne  }">
+  
+  <div class="mini-wo"  :class=" woColor()">
+    
+    <div class="mini-wo__head" @click="wo.elements ? selectWO(wo.id): '' ">
       <h3>{{ wo.id }}</h3>
       <span v-if="wo.platform">{{wo.platform }}</span>
       <span v-if="!wo.platform">--</span>
     </div>
-    <div class="wo-body">
+    <div class="mini-wo__body" @click="wo.elements ? selectWO(wo.id): '' ">
       <p>
         <b v-if ="wo.status" >{{ wo.status }}</b> 
         <b v-if ="!wo.status" >--</b> 
@@ -19,14 +20,15 @@
         <b v-if ="!wo.total" >-</b> 
       </p>
     </div>
-  </article>
-    <div class="wo-footer">
-      <button @click="setShowWO(wo.id)" v-if="wo && wo.elements">
+    <div class="mini-wo__footer">
+      <button class="mini-wo__button" @click="setShowWO(wo.id)" v-if="wo && wo.elements">
         <img src="/img/check-square.svg" v-if="wo.show">
         <img src="/img/square.svg" v-if="!wo.show">
       </button>
     </div>
   </div>
+
+
   
     
     
@@ -48,6 +50,20 @@ export default {
   },
   methods:{
     ...mapActions(['setShowWO','selectWO']),
+    woColor(){
+      let t = "";
+      
+      if(this.wo.elements){
+        t = "mini-wo_white";
+      }else{
+        t = "mini-wo_gray";
+      }
+      if(this.wo.id == this.WOSelected)
+        t =  "mini-wo_black";
+      t = !this.wo.status? t+" min-wo_border_dashed" : t+" min-wo_border_solid" 
+      
+      return t;
+    }
   },
   computed: {
     WOSelected() {
@@ -68,41 +84,46 @@ export default {
 </script>
 
 <style lang="scss">
-  .wos-index{
-    
-    &.normal{
-      background-color: white;
-      border: solid 1px black;
-      color: black;
-    }
-    &.inverse{
-      background-color: black;
-      border: solid 1px white;
-      color: white;
-    }
 
-    .wo-head{
-      text-align: center;
-      &.normal{
-        border-bottom: solid 1px black;
-      }
-      &.inverse{
-        border-bottom: solid 1px white;
-      }
-      &.alert{
-        background-image: url("/public/img/alert-triangle.svg");
-        background-size: 20%; /* Cambia el tamaño de la imagen (ejemplo: 100px) */
-        background-position: right center; /* Coloca la imagen a la derecha y centrada verticalmente */
-        background-repeat: no-repeat;
-        
-      }
+  .mini-wo{
+    text-align: center;
+    border-width: 1px;
+    &.mini-wo_black{
+      background-color: black;
+      color: white;
+      border-color: white;
     }
-    .wo-body{
-      text-align: center;
+    &.mini-wo_white{
+      background-color: white;
+      color: black;
+      border-color: black;
     }
-    .wo-footer{
+    &.mini-wo_gray{
+      background-color: gray;
+      color: black;
+      border-color: gray;
+    }
+    &.min-wo_border_dashed{
+      border-style: dashed;
+      
+    }
+    &.min-wo_border_solid{
+      border-style: solid;
+      
+    }
+    
+
+
+    .mini-wo__head{
+      
+    }
+    .mini-wo__body{
+
+    }
+    .mini-wo__footer{
+      width: 100%;
       text-align: right;
-      button{
+      .mini-wo__button{
         background: none;
         color: inherit;
         border: none;
@@ -117,5 +138,7 @@ export default {
       }
     }
   }
+
+
   
 </style>

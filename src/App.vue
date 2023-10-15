@@ -27,12 +27,13 @@
             <h2>TVAN</h2>
           </div>
           <div>
-            <div class="owners" v-for="(line, index) in getLines(getVanilla)" :key="index">
+            <div class="departments" v-for="(line, index) in getLines(getVanilla)" :key="index">
               <h2>{{ line }}</h2>
               <div class="worders" :class="{'alone-screen': justLines, 'share-screen': !justLines}">
                 <WO v-for="(wo,i) in getOrderByLine(getVanilla,line)" :key="i" :ElementsBefore=" i > 0 ? getOrderByLine(getVanilla,line)[i-1].elements : wo.elements  " :wo="wo"/>
               </div>
             </div>
+
             <div class="inventory" v-if="Object.keys(getVanillaInventory).length > 0">
               <div class="title">
                 <h3>Inventory</h3>
@@ -52,7 +53,7 @@
             <h2>TTLA</h2>
           </div>
           <div>
-            <div class="owners" v-for="(line, index) in getLines(getTtla)" :key="index">
+            <div class="departments" v-for="(line, index) in getLines(getTtla)" :key="index">
               <h2>{{ line }}</h2>
               <div class="worders" :class="{'alone-screen': justLines, 'share-screen': !justLines}">
                 <WO v-for="(wo,i) in getOrderByLine(getTtla,line)" :key="i" :ElementsBefore=" i > 0 ? getOrderByLine(getTtla,line)[i-1].elements : wo.elements  " :wo="wo"/>
@@ -78,8 +79,8 @@
         <h2>USING PARTS</h2>
       </div>
       <div class="toOrder-content">
-        <ToOrder :items ="getVanillaTotals" title='TVAN'/>
-        <ToOrder :items ="getTtlaTotals" title='TTLA' />
+        <ToOrder :items ="getVanillaTotals" title='TVAN' wip='WIPTVAN'/>
+        <ToOrder :items ="getTtlaTotals" title='TTLA' wip='WIPTTLA' />
       </div>
     </div>
 
@@ -279,7 +280,7 @@ export default {
       text-align: center;
     }
   }
-  .owners{
+  .departments{
     padding: 10px 10px 10px 10px;
     h2{
       padding-left: 3px;

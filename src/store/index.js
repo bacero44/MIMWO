@@ -25,7 +25,7 @@ export default createStore({
         return null;
       }
     },
-    //Mejorar los getter de getVanilla y TTLA
+    //TODO: Improve methods getVanilla y TTLA
     getVanilla(state) {
       return state.wos.filter(e => e.belongs === 'WIPTVAN');
     },
