@@ -39,7 +39,7 @@
           <th v-if="stock">ASRSB</th>
         </tr>
         <tbody v-for="(value,key) in parts" :key="key">
-          <tr v-if="likely(key)" >
+          <tr v-if="likely(key)" :class=" !enough(value.qty,value.wip, value.asrsb) && stock ? 'gray' : '' ">
             <td class="left" :title="value.description">{{ key }}</td>
             <td class="right">{{ value.qty }}</td>
             <td class="right" v-if="stock">{{ value.wip }}</td>
@@ -132,6 +132,9 @@ export default {
       
       
       return q;
+    },
+    enough(qty,wip, asrsb){
+      return wip+asrsb >= qty ? true : false 
     }
     
   },
@@ -306,6 +309,9 @@ export default {
       }
       td{
         border-bottom: 1px solid;
+      }
+      .gray{
+        background-color: gray;
       }
     }
     .shopping-list{

@@ -4,8 +4,8 @@
     <div>
       <div id="head">
         <div id="title">
-          <h1>Bacero44 </h1>
-          Life is too short to last long...
+          <h1>Bacero44</h1>
+          Just keeping the line running... 
         </div>
         <div id="menu">
           <div class="meun-element">

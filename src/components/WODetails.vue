@@ -1,16 +1,15 @@
 <template>
-  <div id="WO-detail">
-    <div class="head">
-      <h2>WO {{ getWO.id }} <span v-if="getWO.status">{{ getWO.done }} / {{ getWO.total }}</span> </h2>
+  <div class="show-wo">
+    <div class="show-wo__head">
+      <h2>WO {{ getWO.id }}  </h2><span v-if="getWO.status">{{ getWO.done }} / {{ getWO.total }}</span>
     </div>
-    <div class="content">
-      {{ getWO }}
+    <div class="show-wo__body">
       <div v-for="(element, index) in getWO.elements" :key="index">
         <h3>{{ element.name }}</h3>
-        <div v-for="(part,i) in element.data" :key="i" class="elements">
-          <div class="gpn">{{ part.gpn }}</div>
-          <div class="descripcion">{{ part.description }}</div>
-          <div class="qty">
+        <div v-for="(part,i) in element.data" :key="i" class="show-wo__elements">
+          <div class="show-wo__gpn">{{ part.gpn }}</div>
+          <div class="show-wo__descripcion">{{ part.description }}</div>
+          <div class="show-wo__qty">
             {{ part.qty }}
             <span v-if="getWO.status">
               ({{ partials(part.qty,getWO.total,getWO.done) }})
@@ -45,18 +44,23 @@ export default {
 };
 </script>
 <style lang="scss">
-  #WO-detail{
-    .head{
+  .show-wo{
+
+    .show-wo__head{
+      display: grid;
+      grid-template-columns: 50% 50%;
       background-color: black;
       color: white;
+
+      span{text-align: right;}
     }
-    .content{
+    .show-wo__body{
       padding: 5px;
-      .elements{
+      .show-wo__elements{
         display: grid;
         grid-template-columns: 25% 60% 15%;
         
-        .qty{
+        .show-wo__qty{
           text-align: center;
         }
       }
