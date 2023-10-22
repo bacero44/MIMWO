@@ -1,4 +1,5 @@
 <template>
+  
   <div id="board" :class="{'alone-screen': justLines, 'share-screen': !justLines}">
     
     <div>
@@ -10,9 +11,12 @@
         <div id="menu">
           <div class="meun-element">
             <button class="parts" @click="parts = !parts,selectWO(0)">
-              <img src="/img/list.svg" alt="Descripción de la imagen">
+              <img src="/img/list.svg" >
               <span>Parts</span>
             </button>
+          </div>
+          <div class="meun-element">
+            <PrintSequence/>
           </div>
           <div class="meun-element">
             <UpExcels/>
@@ -95,10 +99,12 @@
      
      
     </div>
+    
 </template>
 
 <script>
 import WO from './components/WO.vue'
+import PrintSequence from './components/PrintSequence.vue'
 import ToOrder from './components/ToOrder.vue'
 import UpExcels from './components/UpExcels.vue'
 import WODetails from './components/WODetails.vue'
@@ -121,7 +127,8 @@ export default {
       UpExcels,
       ToOrder,
       WODetails,
-      LineInventory
+      LineInventory,
+      PrintSequence,
   },
   computed: {
 
@@ -183,8 +190,14 @@ export default {
       return [...lines];
     },
     getOrderByLine(l,n){
-      return Object.values(l).filter((e) => e.line == n).sort((a, b) => {
-        return a.sequence - b.sequence;
+      return Object.values(l).filter((e) => e.line == n ).sort((a, b) => {
+        if (a.sequence === null && b.sequence !== null) {
+          return 1
+        } else if (a.sequence !== null && b.sequence === null) {
+          return -1; 
+        } else {
+          return a.sequence - b.sequence; 
+        }
       });
     }
   }
@@ -230,7 +243,7 @@ export default {
   }
   #menu{
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: repeat(3,auto) ;
     justify-content: end;
     grid-gap: 10px; 
     margin-bottom: 10px;

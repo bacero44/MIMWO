@@ -31,6 +31,7 @@ export default{
           'HARDWAREANDFASTNERS',
           'HARDWAREANDFASTNERS',
           'REFERENCEDOCUMENTS,SPECS',
+          'SHOPFLOORROUTING',
         ],
         WIPTTLA:[
           'FGI&ASSEMBLIES',
@@ -42,6 +43,7 @@ export default{
           'SHEETMETAL',
           'SERVICEPARTS-NONINVENTORY',
           'HARDWAREANDFASTNERS',
+          'SHOPFLOORROUTING',
         ]
       }
       
@@ -158,12 +160,13 @@ export default{
         });
       });
       const id = worksheet['AN'+5]?.v.replace(/\*/g, "");
-        self.addElements({
+      self.addElements({
         id: id,
         line: worksheet['O'+5]?.v,
         belongs:belongs,
         elements:finalElements,
-        show: true
+        show: true,
+        sequence : null,
       });
     },
     SequenceExcelHandler(worksheet){

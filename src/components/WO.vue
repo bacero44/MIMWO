@@ -1,7 +1,6 @@
 <template>
   
   <div class="mini-wo"  :class=" woColor()">
-    
     <div class="mini-wo__head" @click="wo.elements ? selectWO(wo.id): '' ">
       <h3>{{ wo.id }}</h3>
       <span v-if="wo.platform">{{wo.platform }}</span>
