@@ -49,12 +49,9 @@ export default {
      //const names = this.workOrdes(l).map(item => item.elements).flat();
      //return [... new Set(names.map(e => e.name))];
 
-      const elements = this.workOrdes(l).map(item => item.elements).flat();
+      const elements = this.workOrdes(l).map(item => item.elements).filter(elements => elements).flat();
       const filtered = elements.filter(i => i.data.length > 0);
       return new Set(filtered.map(obj => obj.name));
-      
-     
-     
     },
     elements(elements, e){
       const t = elements.filter(obj => obj.name === e);
