@@ -54,8 +54,12 @@ export default {
       return new Set(filtered.map(obj => obj.name));
     },
     elements(elements, e){
-      const t = elements.filter(obj => obj.name === e);
-      return t.map(obj => obj.data).flat();
+      if(elements){
+        const t = elements.filter(obj => obj.name === e);
+        return t.map(obj => obj.data).flat();
+      }else{
+        return[];
+      }
     },
     
     

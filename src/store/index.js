@@ -139,6 +139,9 @@ export default createStore({
     },
     addInventory(state,payload){
       state.inventory = payload;
+    },
+    unselectWO(state){
+      state.selected = 0;
     }
   },
   actions: {
@@ -156,6 +159,9 @@ export default createStore({
     },
     addToInventory({commit}, payload){
       commit('addInventory',payload)
+    },
+    unselect({commit}){
+      commit('unselectWO')
     }
 
     

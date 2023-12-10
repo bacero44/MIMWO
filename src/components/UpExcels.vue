@@ -62,6 +62,20 @@ export default{
       this.addToInventory(payload);
     },
 
+    findPlatform(text){
+      // TODO: Improve plataforms
+      if(text)
+        if(text.includes('ARCADIA')){
+          return 'ARCADIA'
+        }
+        else{
+          return 'INDUS'
+        }
+      else{
+        return ''
+      }
+    },
+
         
     textWithoutSpaces(text){
       if (text != null){
@@ -124,7 +138,12 @@ export default{
       
       const fundElements =[];
       const belongs = worksheet['A'+5]?.v;
-      const elementsList = self.elements[belongs]
+      let description = '';
+      for(let i = 15; i<= 25; i++){
+        description = description +" "+ this.findPlatform(worksheet['R'+i]?.v);
+      }
+      const platform = this.findPlatform(description);
+      const elementsList = self.elements[belongs];
 
       for(let i = 25; i<=last; i++){
         const element = elementsList.indexOf(self.textWithoutSpaces(worksheet['A'+i]?.v));
@@ -164,6 +183,7 @@ export default{
         id: id,
         line: worksheet['O'+5]?.v,
         belongs:belongs,
+        platform: platform,
         elements:finalElements,
         show: true,
         sequence : null,

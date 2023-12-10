@@ -1,24 +1,25 @@
 <template>
   
   <div id="board" :class="{'alone-screen': justLines, 'share-screen': !justLines}">
-    
     <div>
       <div id="head">
         <div id="title">
           <h1>Bacero44</h1>
-          Just keeping the line running... 
+          Just look busy... 
         </div>
         <div id="menu">
-          <div class="meun-element">
-            <button class="parts" @click="parts = !parts,selectWO(0)">
+          
+          <div class="menu-element">
+            <button class="parts" @click="set_subsection('parts')">
               <img src="/img/list.svg" >
               <span>Parts</span>
             </button>
           </div>
-          <div class="meun-element">
+          
+          <div class="menu-element">
             <PrintSequence/>
           </div>
-          <div class="meun-element">
+          <div class="menu-element">
             <UpExcels/>
           </div>
         </div>
@@ -30,6 +31,7 @@
           <div class="name">
             <h2>TVAN</h2>
           </div>
+          
           <div>
             <div class="departments" v-for="(line, index) in getLines(getVanilla)" :key="index">
               <h2>{{ line }}</h2>
@@ -78,7 +80,7 @@
       </div>
     </div>
    
-    <div id="ToOrder-container" v-if="parts && WOSelected ==0">
+    <div id="ToOrder-container" v-if=" subsection['parts'] && WOSelected == 0">
       <div class="ToOrder-title">
         <h2>USING PARTS</h2>
       </div>
@@ -88,17 +90,17 @@
       </div>
     </div>
 
-    <div id="WODetails-container" v-if="WOSelected > 0">
+    <div id="WODetails-container" v-if="WOSelected > 0 ">
       <WODetails :id="WOSelected" />
     </div>
 
-    
-  </div>
+   
 
-    <div>
+
+    
+  
      
-     
-    </div>
+  </div>
     
 </template>
 
@@ -109,7 +111,10 @@ import ToOrder from './components/ToOrder.vue'
 import UpExcels from './components/UpExcels.vue'
 import WODetails from './components/WODetails.vue'
 import LineInventory from './components/LineInventory.vue'
+
 import { mapActions } from 'vuex';
+
+
 
 export default {
   name: 'App',
@@ -119,17 +124,22 @@ export default {
       inventory:{
         ttla: false,
         tvan: false
+      },
+      subsection:{
+        setup: false,
+        parts: false,
+        
       }
     }
   },
   components: {
-      WO,
-      UpExcels,
-      ToOrder,
-      WODetails,
-      LineInventory,
-      PrintSequence,
-  },
+    WO,
+    UpExcels,
+    ToOrder,
+    WODetails,
+    LineInventory,
+    PrintSequence,
+},
   computed: {
 
     wos(){
@@ -149,7 +159,7 @@ export default {
       return this.$store.getters.getTtlaTotals;
     },
     justLines(){
-      if(this.parts || this.WOSelected != 0){
+      if(this.show_subsection() || this.WOSelected != 0){
         return false;
       }else{
         return true;
@@ -172,7 +182,7 @@ export default {
     
   },
   methods: {
-    ...mapActions(['selectWO']),
+    ...mapActions(['selectWO','unselect']),
     handleMenu(v) {
       if(this.addFile[v]){
         this.addFile[v] = !this.addFile[v];
@@ -199,9 +209,23 @@ export default {
           return a.sequence - b.sequence; 
         }
       });
-    }
+    },
+    set_subsection(e){
+      const self = this;
+      const t = self.subsection[e];
+      self.unselect();
+      for (const key in self.subsection) {
+        self.subsection[key] = false;
+      }
+      self.subsection[e] = !t;
+    },
+    show_subsection() {
+      return Object.values(this.subsection).some(value => value === true);
+    },
+
   }
 }
+// TODO: change onclik methods
 </script>
 
 <style lang="scss">
@@ -243,19 +267,22 @@ export default {
   }
   #menu{
     display: grid;
-    grid-template-columns: repeat(3,auto) ;
+    grid-template-columns: repeat(4,auto) ;
     justify-content: end;
     grid-gap: 10px; 
     margin-bottom: 10px;
-    .meun-element{
+    
+    .menu-element{
       border: solid black 2px;
       padding: 2px;
+      
       button{
+        
         background: none;
         color: inherit;
         border: none;
         padding: 0;
-        font: inherit;
+       
         cursor: pointer;
         outline: inherit;
         img{
@@ -292,7 +319,9 @@ export default {
       text-orientation: upright;
       text-align: center;
     }
+    
   }
+  
   .departments{
     padding: 10px 10px 10px 10px;
     h2{
