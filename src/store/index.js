@@ -1,4 +1,3 @@
-
 import { createStore } from 'vuex'
 
 export default createStore({
@@ -42,8 +41,28 @@ export default createStore({
     getWOSelected(state){
       return state.selected;
     },
+    getElementsTotal: (state) => (area) =>{
+      const sumaByGpn = {};
+      const filtered = state.wos.filter(w => w.belongs === area && w.show && w.elements);
+      filtered.forEach(wo => {
+        wo.elements.forEach( element => {
+          element.data.forEach( e => {
+            const gpn = e.gpn;
+            const description = e.description;
+            const qty = wo.done >0 && wo.total ? ((e.qty/wo.total)*(wo.total-wo.done)) : e.qty;
+            if (sumaByGpn[gpn]) {
+              sumaByGpn[gpn].qty += qty;
+            } else {
+              sumaByGpn[gpn] = { description, qty };
+            }
+          });
+        });
+        
+      });
+      return sumaByGpn
+    },
     
-    getElementsTotal:(state) => (param) => {
+    getElementsTotal_old:(state) => (param) => {
       const sumaByGpn = {};
       state.wos.forEach(wo => {
         if (wo.belongs === param) {

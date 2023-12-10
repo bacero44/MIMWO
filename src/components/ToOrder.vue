@@ -74,16 +74,14 @@
       
       <div class="" v-for="(value,key) in parts" :key="key">
         <div v-if="shop(value.qty,includeWip ? value.wip : 0, value.asrsb) > 0 && likely(key)">
-          {{ key }} x  {{ shop(value.qty,includeWip ? value.wip : 0, value.asrsb) }} pcs
+          <span :title="itemDescription(key)"> {{ key }} </span> x  {{ shop(value.qty,includeWip ? value.wip : 0, value.asrsb) }} pcs
         </div>
       </div>
     </div>
       
 
     </div>
-    
-  
-   
+      
   </div>
 </template>
 <script>
@@ -135,6 +133,14 @@ export default {
     },
     enough(qty,wip, asrsb){
       return wip+asrsb >= qty ? true : false 
+    },
+    itemDescription(gpn){
+      if(this.items[gpn]){
+        return this.items[gpn].description
+      }else{
+        return ''
+      }
+        
     }
     
   },

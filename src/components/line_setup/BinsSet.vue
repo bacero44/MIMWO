@@ -1,28 +1,26 @@
 <template>
-  <div>
-    <div>
+  <div class="bins">
+    <div class="bins-kind">
       <h3>SCREWS <span>(Small Bins)</span></h3>
-      <div v-for="value, index in Screws()" :key="index">
+      <div class="bins-list" v-for="value, index in Screws()" :key="index">
         {{ index }} x {{ value }}
       </div>
     </div>
 
-    <div>
+    <div class="bins-kind">
       <h3>Small Bins </h3>
-      <div v-for="bin in SmallBins()" :key="bin">
+      <div class="bins-list" v-for="bin in SmallBins()" :key="bin">
         {{ getItem(bin.element, bin.sub).gpn }} x 2
       </div>
     </div>
 
-    <div>
+    <div class="bins-kind">
       <h3>Big Bins </h3>
-      <div v-for="bin in BigBins()" :key="bin">
+      <div class="bins-list" v-for="bin in BigBins()" :key="bin">
         {{ getItem(bin.element, bin.sub).gpn }} x 2
       </div>
       
     </div>
-
-
   </div>
 </template>
 <script>
@@ -114,3 +112,19 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+  .bins{
+    border: solid 2px black;
+    margin: 3px;
+  }
+  .bins-kind{
+    h3{
+      background-color: black;
+      color: white;
+    }
+  }
+  .bins-list{
+    padding: 5px;
+  }
+</style>

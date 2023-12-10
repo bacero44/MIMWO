@@ -187,6 +187,7 @@ export default{
         elements:finalElements,
         show: true,
         sequence : null,
+        done:0
       });
     },
     SequenceExcelHandler(worksheet){

@@ -8,6 +8,7 @@
       <span v-if="getWO.status">{{ getWO.done }} / {{ getWO.total }}</span>
     </div>
     <div class="menu-wo">
+      {{ getWO.platform }}
       <button :class=" {selected : showBins} "  @click="showSetLine = false, showBins = !showBins" v-if="getWO.belongs =='WIPTVAN'">
         Bins
       </button>
