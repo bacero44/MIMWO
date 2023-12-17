@@ -49,7 +49,9 @@ export default createStore({
           element.data.forEach( e => {
             const gpn = e.gpn;
             const description = e.description;
-            const qty = wo.done >0 && wo.total ? ((e.qty/wo.total)*(wo.total-wo.done)) : e.qty;
+            // PARTIALS
+            //const qty = wo.done >0 && wo.total ? ((e.qty/wo.total)*(wo.total-wo.done)) : e.qty;
+            const qty = e.qty;
             if (sumaByGpn[gpn]) {
               sumaByGpn[gpn].qty += qty;
             } else {
